@@ -47,18 +47,6 @@ def computePixel(img, idx1, idx2, width, center):
 
 def computeBrief(img, locs):
     
-    #patchWidth = 9
-    #nbits = 256
-    #compareX, compareY = makeTestPattern(patchWidth,nbits)
-    #m, n = img.shape
-    #
-    #halfWidth = patchWidth//2
-    #
-    #locs = np.array(list(filter(lambda x: halfWidth <= x[0] < m-halfWidth and halfWidth <= x[1] < n-halfWidth, locs)))
-    #desc = np.array([list(map(lambda x: computePixel(img, x[0], x[1], patchWidth, c), zip(compareX, compareY))) for c in locs])
-    #
-    #return desc, locs
-    
     patchWidth = 9
     nbits = 256
     compareX, compareY = makeTestPattern(patchWidth,nbits)
