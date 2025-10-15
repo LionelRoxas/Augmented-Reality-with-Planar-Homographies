@@ -20,7 +20,7 @@ print(f"CV desk size: {cv_desk.shape}")
 print(f"HP cover size: {hp_cover.shape}")
 
 # Step 2: Match features between cv_desk and cv_cover
-matches, locs1, locs2 = matchPics(cv_desk, cv_cover)
+matches, locs1, locs2 = matchPics(cv_cover, cv_desk)
 print(f"Found {len(matches)} matches")
 
 # Step 3: Compute homography with RANSAC
