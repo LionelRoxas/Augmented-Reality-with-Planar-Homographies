@@ -29,8 +29,7 @@ def matchPics(I1, I2):
     desc2, locs2 = computeBrief(img2, locs2)
 
     # Match features using the descriptors
-    # Using ratio=0.65 as suggested in assignment
-    matches = briefMatch(desc1, desc2, ratio=0.65)
+    matches = briefMatch(desc1, desc2, ratio=0.75)
     
     # Swap x,y coordinates to match expected format (y,x) -> (x,y)
     locs1 = locs1[:, [1, 0]]

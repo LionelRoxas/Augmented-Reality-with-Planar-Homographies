@@ -62,7 +62,7 @@ for i in range(book_frame_count):
     ar_resized = cv2.resize(ar_cropped, (cover_W, cover_H))
 
     try:
-        matches, locs1, locs2 = matchPics(book_frame, book_cover)
+        matches, locs1, locs2 = matchPics(book_cover, book_frame)
         
         if len(matches) < 4:
             print(f"  Warning: Frame {i} has only {len(matches)} matches, skipping")
