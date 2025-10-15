@@ -3,28 +3,40 @@ import cv2
 import skimage.io 
 import skimage.color
 
-#Import necessary functions
+# Import necessary functions
 from matchPics import matchPics
 from helper import plotMatches
-from planarH import *
+from planarH import computeH_ransac, compositeH
 
+# Write script for Q3.9
 
-#Write script for Q3.9
+# Step 1: Read images
 cv_cover = cv2.imread('../data/cv_cover.jpg')
 cv_desk = cv2.imread('../data/cv_desk.png')
 hp_cover = cv2.imread('../data/hp_cover.jpg')
 
-H, W, _ = cv_cover.shape
-hp_cover_resized = cv2.resize(hp_cover, dsize=(W, H))
+print(f"CV cover size: {cv_cover.shape}")
+print(f"CV desk size: {cv_desk.shape}")
+print(f"HP cover size: {hp_cover.shape}")
 
-matches, locs1, locs2 = matchPics(cv_desk, hp_cover)
-H2to1, inliers = computeH_ransac(locs1[matches[:,0]], locs2[matches[:,1]])
-warped_img = cv2.warpPerspective(hp_cover_resized, H2to1, dsize=(cv_desk.shape[1], cv_desk.shape[0]))
-cv2.imwrite('./result/HarryPotter_made.jpg', warped_img)
-cv2.imshow('HarryPotter_made', warped_img)
-cv2.waitKey(0)
+# Step 2: Match features between cv_desk and cv_cover
+matches, locs1, locs2 = matchPics(cv_cover, cv_desk)
+print(f"Found {len(matches)} matches")
 
-composite_img = compositeH(H2to1, hp_cover_resized, cv_desk)
-cv2.imwrite('./result/HarryPotter_Desk.jpg', composite_img)
-cv2.imshow('HarryPotter_Desk', composite_img)
-cv2.waitKey(0)
+# Step 3: Compute homography with RANSAC
+bestH2to1, inliers = computeH_ransac(
+    locs1[matches[:, 0]],  # x1: points in cv_desk (destination)
+    locs2[matches[:, 1]]   # x2: points in cv_cover (source)
+)
+print(f"RANSAC found {int(np.sum(inliers))} inliers out of {len(matches)} matches")
+
+# Step 4: Resize HP cover to match CV cover dimensions
+cv_cover_h, cv_cover_w = cv_cover.shape[:2]
+hp_cover_resized = cv2.resize(hp_cover, (cv_cover_w, cv_cover_h))
+print(f"Resized HP cover to: {hp_cover_resized.shape}")
+
+# Step 5: Create composite image
+composite_img = compositeH(bestH2to1, hp_cover_resized, cv_desk)
+
+# Step 6: Save and display results
+cv2.imwrite('HarryPotter_Desk.jpg', composite_img)
